@@ -133,20 +133,24 @@ const Project = ({
               float: 'right',
             }}
           >
-            <Box mx={1} fontSize={5}>
-              <SocialLink
-                name="Check repository"
-                fontAwesomeIcon="github"
-                url={repositoryUrl}
-              />
-            </Box>
-            <Box mx={1} fontSize={5}>
-              <SocialLink
-                name="See project"
-                fontAwesomeIcon="globe"
-                url={projectUrl}
-              />
-            </Box>
+            {repositoryUrl !== null && (
+              <Box mx={1} fontSize={5}>
+                <SocialLink
+                  name="Check repository"
+                  fontAwesomeIcon="github"
+                  url={repositoryUrl}
+                />
+              </Box>
+            )}
+            {projectUrl !== null && (
+              <Box mx={1} fontSize={5}>
+                <SocialLink
+                  name="See project"
+                  fontAwesomeIcon="globe"
+                  url={projectUrl}
+                />
+              </Box>
+            )}
           </Flex>
           <ImageSubtitle bg="primary" color="white" y="bottom" x="right" round>
             {type}
