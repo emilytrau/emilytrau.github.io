@@ -60,9 +60,6 @@ const Header = () => (
                 render={({ contentfulAbout }) => (
                   <RouteLink
                     onClick={home.onClick}
-                    style={{
-                      cursor: 'pointer',
-                    }}
                     name={contentfulAbout.name}
                   />
                 )}
