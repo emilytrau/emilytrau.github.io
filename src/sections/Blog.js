@@ -183,7 +183,7 @@ const Blog = () => (
       return (
         isMediumUserDefined && (
           <Section.Container id="blog" Background={Background}>
-            <Section.Header name="Blog" icon="✍️" label="blog" />
+            <Section.Header name="Blog" icon="📓" label="blog" />
             <CardContainer minWidth="300px">
               {posts.map(({ Component, ...rest }) => (
                 <Fade bottom key={rest.id}>
