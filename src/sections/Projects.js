@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Image, Text, Flex, Box } from 'rebass';
 import { StaticQuery, graphql } from 'gatsby';
@@ -10,6 +10,7 @@ import SocialLink from '../components/SocialLink';
 import Triangle from '../components/Triangle';
 import ImageSubtitle from '../components/ImageSubtitle';
 import Hide from '../components/Hide';
+import LinkAnimated from '../components/LinkAnimated';
 
 const Background = () => (
   <div>
@@ -103,6 +104,12 @@ const ProjectTag = styled.div`
   }
 `;
 
+const ProjectFilters = styled.div`
+  ${MEDIA_QUERY_SMALL} {
+    display: none;
+  }
+`;
+
 const Project = ({
   name,
   description,
@@ -179,42 +186,63 @@ Project.propTypes = {
   }).isRequired,
 };
 
-const Projects = () => (
-  <Section.Container id="projects" Background={Background}>
-    <Section.Header name="Projects" icon="💻" label="notebook" />
-    <StaticQuery
-      query={graphql`
-        query ProjectsQuery {
-          contentfulAbout {
-            projects {
-              id
-              name
-              description
-              projectUrl
-              repositoryUrl
-              publishedDate(formatString: "YYYY")
-              type
-              logo {
-                title
-                image: resize(width: 200, quality: 100) {
-                  src
+const Projects = () => {
+  const [typeFilter, setTypeFilter] = useState(null);
+  const selectType = (type) => setTypeFilter(type !== typeFilter ? type : null);
+
+  const unique = (value, index, self) => self.indexOf(value) === index;
+
+  return (
+    <Section.Container id="projects" Background={Background}>
+      <StaticQuery
+        query={graphql`
+          query ProjectsQuery {
+            contentfulAbout {
+              projects {
+                id
+                name
+                description
+                projectUrl
+                repositoryUrl
+                publishedDate(formatString: "YYYY")
+                type
+                logo {
+                  title
+                  image: resize(width: 200, quality: 100) {
+                    src
+                  }
                 }
               }
             }
           }
-        }
-      `}
-      render={({ contentfulAbout }) => (
-        <CardContainer minWidth="350px">
-          {contentfulAbout.projects.map((p, i) => (
-            <Fade bottom delay={i * 200} key={p.id}>
-              <Project {...p} />
-            </Fade>
-          ))}
-        </CardContainer>
-      )}
-    />
-  </Section.Container>
-);
+        `}
+        render={({ contentfulAbout }) => (
+          <div>
+            <Section.Header name="Projects" icon="💻" label="notebook">
+              <ProjectFilters>
+                {contentfulAbout.projects.map(p => p.type).filter(unique).sort().map(type => (
+                  <LinkAnimated
+                    style={{ marginLeft: '16px' }}
+                    onClick={() => selectType(type)}
+                    selected={typeFilter === type}
+                  >
+                    {type}
+                  </LinkAnimated>
+                ))}
+              </ProjectFilters>
+            </Section.Header>
+            <CardContainer minWidth="350px">
+              {contentfulAbout.projects.filter(p => !typeFilter || typeFilter === p.type).map((p, i) => (
+                <Fade bottom delay={i * 200} key={`${p.id} ${typeFilter}`}>
+                  <Project {...p} />
+                </Fade>
+              ))}
+            </CardContainer>
+          </div>
+        )}
+      />
+    </Section.Container>
+  );
+}
 
 export default Projects;
