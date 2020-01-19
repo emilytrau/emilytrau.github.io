@@ -224,7 +224,7 @@ const Projects = () => {
                   <LinkAnimated
                     style={{ marginLeft: '16px' }}
                     onClick={() => selectType(type)}
-                    selected={typeFilter === type}
+                    selected={typeFilter !== type}
                   >
                     {type}
                   </LinkAnimated>
